@@ -2,6 +2,8 @@
 
 A React-based web interface for generating WireGuard client configuration files with an intuitive UI and dark/light theme support.
 
+[![Deploy React to Github Pages](https://github.com/isubhampadhi56/wireguard-ui/actions/workflows/deploy.yml/badge.svg)](https://github.com/isubhampadhi56/wireguard-ui/actions/workflows/deploy.yml)
+
 ![WireGuard UI Screenshot](./public/screenshot.png)
 
 ## Features
