@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
 import nacl from 'tweetnacl';
@@ -15,6 +15,30 @@ export default function WireGuardClientConfig() {
   const [persistentKeepalive, setPersistentKeepalive] = useState(25);
   const [config, setConfig] = useState('');
   const [clientPublicKey, setClientPublicKey] = useState('');
+  const [showDownloadModal, setShowDownloadModal] = useState(false);
+  const [filename, setFilename] = useState('wireguard');
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  const handleDownloadClick = () => {
+    if (filename) {
+      const blob = new Blob([config], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${filename}.conf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      setShowDownloadModal(false);
+    }
+  };
+
+  const handleModalClick = (e: React.MouseEvent) => {
+    if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+      setShowDownloadModal(false);
+    }
+  };
 
   const generateConfig = () => {
     // Generate key pair
@@ -88,6 +112,48 @@ PersistentKeepalive = ${persistentKeepalive}
               value={config} 
               className={`w-full font-mono text-sm ${darkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-gray-100 border-gray-300'} border rounded p-2`} 
             />
+            <button 
+              onClick={() => setShowDownloadModal(true)}
+              className={`w-full py-2 px-4 rounded ${darkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-black hover:bg-gray-800'} text-white`}
+            >
+              Download Config
+            </button>
+
+            {showDownloadModal && (
+              <div 
+                ref={modalRef}
+                className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50"
+                onClick={handleModalClick}
+              >
+                <div className={`${darkMode ? 'bg-gray-800/90' : 'bg-white/90'} rounded-lg shadow-xl p-6 w-full max-w-md border ${darkMode ? 'border-gray-600' : 'border-gray-300'}`}>
+                  <h2 className={`text-xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-black'}`}>Download Configuration</h2>
+                  <div className="mb-4">
+                    <label className={`block mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Filename (without extension)</label>
+                    <input
+                      type="text"
+                      value={filename}
+                      onChange={(e) => setFilename(e.target.value)}
+                      className={`w-full px-3 py-2 rounded ${darkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-white border-gray-300'} border`}
+                      autoFocus
+                    />
+                  </div>
+                  <div className="flex justify-end space-x-2">
+                    <button
+                      onClick={() => setShowDownloadModal(false)} 
+                      className={`px-4 py-2 rounded ${darkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'}`}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleDownloadClick}
+                      className={`px-4 py-2 rounded ${darkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-black hover:bg-gray-800'} text-white`}
+                    >
+                      Download
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           <p className={`text-center text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
             🔑 Client Public Key: <code className="font-mono">{clientPublicKey}</code>
