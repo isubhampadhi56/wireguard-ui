@@ -11,12 +11,13 @@
   },
   "dependencies": {
     "@scure/base": "^1.2.5",
-    "@stablelib/x25519": "^2.0.1",
     "@tailwindcss/vite": "^4.1.7",
+    "buffer": "^6.0.3",
     "framer-motion": "^12.12.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "tailwindcss": "^4.1.7"
+    "tailwindcss": "^4.1.7",
+    "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

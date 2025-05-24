@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
-import { generateKeyPair } from '@stablelib/x25519';
-import { base64 } from '@scure/base';
+import nacl from 'tweetnacl';
+import { Buffer } from 'buffer';
 import {InputBox} from '../components/input-fields';
 
 export default function WireGuardClientConfig() {
@@ -17,9 +17,12 @@ export default function WireGuardClientConfig() {
   const [clientPublicKey, setClientPublicKey] = useState('');
 
   const generateConfig = () => {
-    const { publicKey, secretKey } = generateKeyPair();
-    const privateKey = base64.encode(secretKey);
-    const pubKey = base64.encode(publicKey);
+    // Generate key pair
+    const raw = nacl.box.keyPair();
+
+    // WireGuard uses only the first 32 bytes of secretKey
+    const privateKey = Buffer.from(raw.secretKey).toString('base64');
+    const publicKey =Buffer.from(raw.publicKey).toString('base64');
 
     const conf = `
 [Interface]
@@ -35,7 +38,7 @@ PersistentKeepalive = ${persistentKeepalive}
     `.trim();
 
     setConfig(conf);
-    setClientPublicKey(pubKey);
+    setClientPublicKey(publicKey);
   };
 
   return (
