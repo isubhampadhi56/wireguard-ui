@@ -67,7 +67,7 @@ PersistentKeepalive = ${persistentKeepalive}
 
   return (
     <motion.div className={`max-w-2xl mx-auto p-6 space-y-6 min-h-screen ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-evenly items-center">
         <h1 className="text-3xl font-bold">WireGuard Client Config Generator</h1>
         <button 
           onClick={toggleTheme}
