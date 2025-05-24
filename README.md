@@ -1,54 +1,76 @@
-# React + TypeScript + Vite
+# WireGuard UI Configuration Generator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React-based web interface for generating WireGuard client configuration files with an intuitive UI and dark/light theme support.
 
-Currently, two official plugins are available:
+![WireGuard UI Screenshot](./public/screenshot.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- Generate WireGuard client configurations with one click
+- Automatic key pair generation
+- Customizable connection parameters:
+  - Client IP address
+  - Server public key
+  - Server endpoint
+  - Allowed IPs
+  - DNS servers
+  - Persistent keepalive
+- Dark/light theme toggle
+- Download config files with custom names
+- Responsive design
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Installation
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+1. Clone the repository:
+```bash
+git clone https://github.com/your-repo/wireguard-ui.git
+cd wireguard-ui
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+2. Install dependencies:
+```bash
+npm install
 ```
+
+3. Start the development server:
+```bash
+npm run dev
+```
+
+## Usage
+
+1. Fill in the connection parameters
+2. Click "Generate Config"
+3. Review the generated configuration
+4. Click "Download Config" to save the file
+
+The downloaded `.conf` file can be used directly with WireGuard clients.
+
+## Technology Stack
+
+- React 18
+- TypeScript
+- Vite
+- Tailwind CSS
+- Framer Motion (for animations)
+- TweetNaCl (for cryptographic operations)
+
+## Configuration
+
+The app can be customized by modifying:
+
+- `src/contexts/ThemeContext.tsx` - Theme settings
+- `src/pages/WireGuardClientConfig.tsx` - Main configuration UI
+- `vite.config.ts` - Build configuration
+
+## Building for Production
+
+```bash
+npm run build
+```
+
+The production build will be created in the `dist/` directory.
+
+## License
+
+MIT
