@@ -16,10 +16,10 @@ jobs:
           node-version: 18
 
       - name: Install Dependencies
-        uses: npm install
+        run: npm install
       
       - name: Build Project
-        uses: npm run build
+        run: npm run build
 
       - name: Deploy to Github Pages
         uses: peaceiris/actions-gh-pages@v3
