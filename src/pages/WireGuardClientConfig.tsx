@@ -4,6 +4,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import nacl from 'tweetnacl';
 import { Buffer } from 'buffer';
 import {InputBox} from '../components/input-fields';
+import QRCode from '../components/QRCode';
 
 export default function WireGuardClientConfig() {
   const { darkMode, toggleTheme } = useTheme();
@@ -16,6 +17,7 @@ export default function WireGuardClientConfig() {
   const [config, setConfig] = useState('');
   const [clientPublicKey, setClientPublicKey] = useState('');
   const [showDownloadModal, setShowDownloadModal] = useState(false);
+  const [showQRModal, setShowQRModal] = useState(false);
   const [filename, setFilename] = useState('wireguard');
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -114,9 +116,15 @@ PersistentKeepalive = ${persistentKeepalive}
             />
             <button 
               onClick={() => setShowDownloadModal(true)}
-              className={`w-full py-2 px-4 rounded ${darkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-black hover:bg-gray-800'} text-white`}
+              className={`w-full py-2 px-4 rounded mb-1 ${darkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-black hover:bg-gray-800'} text-white`}
             >
               Download Config
+            </button>
+            <button 
+              onClick={() => setShowQRModal(true)}
+              className={`w-full py-2 px-4 rounded  ${darkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-black hover:bg-gray-800'} text-white`}
+            >
+              Generate QR
             </button>
 
             {showDownloadModal && (
@@ -149,6 +157,30 @@ PersistentKeepalive = ${persistentKeepalive}
                       className={`px-4 py-2 rounded ${darkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-black hover:bg-gray-800'} text-white`}
                     >
                       Download
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+            {showQRModal && (
+              <div 
+                ref={modalRef}
+                className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50"
+                onClick={handleModalClick}
+              >
+                <div className={`${darkMode ? 'bg-gray-800/90' : 'bg-white/90'} rounded-lg shadow-xl p-6 w-full max-w-md border ${darkMode ? 'border-gray-600' : 'border-gray-300'}`}>
+                  <h2 className={`text-xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-black'}`}>Scan QR For Configuration</h2>
+                  <div className="mb-4">
+                    <p className={`text-center text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                      <QRCode value={config} size={400} />
+                    </p>
+                  </div>
+                  <div className="flex justify-end space-x-2">
+                    <button
+                      onClick={() => setShowQRModal(false)} 
+                      className={`px-4 py-2 rounded ${darkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'}`}
+                    >
+                      Cancel
                     </button>
                   </div>
                 </div>
